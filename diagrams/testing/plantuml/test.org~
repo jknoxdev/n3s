@@ -1,0 +1,32 @@
+
+* first test
+
+babel setup (place in scratch)
+(setq org-plantuml-jar-path (expand-file-name "~/apps/plantuml-1.2023.7.jar"))
+(add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
+(org-babel-do-load-languages 'org-babel-load-languages '((plantuml . t)))
+
+* more setup:
+
+#+begin_src sh :results output raw
+  echo "test"
+
+#+end_src
+
+#+RESULTS:
+test
+
+
+#+begin_src plantuml :results :file my-diagram.png
+  title Authentication Sequence
+
+  Alice->Bob: Authentication Request
+  note right of Bob: Bob thinks about it
+  Bob->Alice: Authentication Response
+#+end_src
+
+
+#+begin_src plantuml :file tryout.png
+  Alice -> Bob: synchronous call
+  Alice ->> Bob: asynchronous call
+#+end_src

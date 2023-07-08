@@ -1,0 +1,196 @@
+
+* first test
+
+babel setup (place in scratch)
+(setq org-plantuml-jar-path (expand-file-name "~/apps/plantuml-1.2023.7.jar"))
+(add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
+(org-babel-do-load-languages 'org-babel-load-languages '((plantuml . t)))
+
+* more setup:
+
+#+begin_src sh :results output raw
+  echo "test"
+
+#+end_src
+
+#+RESULTS:
+test
+
+
+#+begin_src plantuml :file my-diagram.png
+  title Authentication Sequence
+
+  Alice->Bob: Authentication Request
+  note right of Bob: Bob thinks about it
+  Bob->Alice: Authentication Response
+#+end_src
+
+#+RESULTS:
+[[file:my-diagram.png]]
+
+
+#+begin_src plantuml :file tryout.png
+  Alice -> Bob: synchronous call
+  Alice ->> Bob: asynchronous call
+#+end_src
+
+#+RESULTS:
+[[file:tryout.png]]
+
+* network tests & examples:
+** simple 210. subnet
+#+begin_src plantuml :file network_test_001.png
+nwdiag {
+  network dmz {
+      address = "210.x.x.x/24"
+  }
+}
+#+end_src
+** test_camera_net
+
+
+#+begin_src plantuml :file test_camera_net_001.png
+  nwdiag {
+    inet [shape = cloud];
+    inet -- router;
+    router -- switch;
+    switch -- cam01;
+
+    network {
+      router;
+      web01;
+      web02;
+    }
+  }
+#+end_src
+
+#+RESULTS:
+[[file:test_camera_net_001.png]]
+** font_awesome
+*** example
+#+begin_src plantuml :file tupadr_3_001.png
+!include <tupadr3/common>
+!include <tupadr3/font-awesome/server>
+!include <tupadr3/font-awesome/database>
+
+title Styling example
+
+FA_SERVER(web1,web1) #Green
+FA_SERVER(web2,web2) #Yellow
+FA_SERVER(web3,web3) #Blue
+FA_SERVER(web4,web4) #YellowGreen
+
+FA_DATABASE(db1,LIVE,database,white) #RoyalBlue
+FA_DATABASE(db2,SPARE,database) #Red
+
+db1 <--> db2
+
+web1 <--> db1
+web2 <--> db1
+web3 <--> db1
+web4 <--> db1
+#+end_src
+
+#+RESULTS:
+[[file:tupadr_3_001.png]]
+
+*** test example
+#+begin_src plantuml :file test_tupadr_3_001.png
+!include <tupadr3/common>
+!include <tupadr3/font-awesome/server>
+!include <tupadr3/font-awesome/database>
+
+title Styling example
+
+FA_SERVER(web1,web1) #Green
+FA_SERVER(web2,web2) #Yellow
+FA_SERVER(web3,web3) #Blue
+FA_SERVER(web4,web4) #YellowGreen
+
+FA_DATABASE(db1,LIVE,database,white) #RoyalBlue
+FA_DATABASE(db2,SPARE,database) #Red
+
+db1 <--> db2
+
+web1 --> db1
+web2 <--> db1
+web3 <--> db1
+web4 <--> db1
+#+end_src
+
+#+RESULTS:
+[[file:test_tupadr_3_001.png]]
+
+** simple house
+
+#+begin_src plantuml :file simple_net_001.png
+  !define ICONURL https://raw.githubusercontent.com/PlantUML/salt/master/src/images
+  !define ROUTER https://raw.githubusercontent.com/PlantUML/salt/master/src/images/Cisco/router.png
+  !define SWITCH https://raw.githubusercontent.com/PlantUML/salt/master/src/images/Cisco/switch.png
+  !define PC https://raw.githubusercontent.com/PlantUML/salt/master/src/images/Cisco/pc.png
+  !define CLOUD https://raw.githubusercontent.com/PlantUML/salt/master/src/images/Cisco/cloud.png
+  !define PHONE https://raw.githubusercontent.com/PlantUML/salt/master/src/images/Cisco/ipphone.png
+  !define CAMERA https://raw.githubusercontent.com/PlantUML/salt/master/src/images/Cisco/ipcamera.png
+
+  !define NET_COLOR #006699
+  !define DEVICE_COLOR #CC3300
+
+  skinparam defaultTextAlignment center
+  skinparam node {
+    BackgroundColor White
+    BorderColor Black
+  }
+
+  package "Home Network" <<Cloud>> {
+    rectangle "Internet" as internet {
+      !define INTERNET_COLOR #0000FF
+      cloud as internet_cloud
+    }
+
+    rectangle "Router" as router {
+      !define ROUTER_COLOR #000000
+      router as home_router
+    }
+
+    rectangle "Switch" as switch {
+      !define SWITCH_COLOR #000000
+      switch as home_switch
+    }
+
+    rectangle "PC" as pc {
+      !define PC_COLOR #000000
+      pc as home_pc
+    }
+
+    rectangle "IP Phone" as phone {
+      !define PHONE_COLOR #000000
+      phone as home_phone
+    }
+
+    rectangle "IP Camera" as camera {
+      !define CAMERA_COLOR #000000
+      camera as home_camera
+    }
+
+    internet -- router
+    router -- switch
+    switch -- pc
+    switch -- phone
+    switch -- camera
+
+    internet_cloud .[NET_COLOR].> home_router : Internet
+    home_router .[NET_COLOR].> home_switch : Ethernet
+    home_switch .[NET_COLOR].> home_pc : Ethernet
+    home_switch .[NET_COLOR].> home_phone : Ethernet
+    home_switch .[NET_COLOR].> home_camera : Ethernet
+
+    internet_cloud -- router
+    router -- switch
+    switch -- pc
+    switch -- phone
+    switch -- camera
+  }
+#+end_src
+
+#+RESULTS:
+[[file:simple_net_001.png]]

@@ -1,0 +1,23 @@
+* databases
+** operations database
+*** recent updates: 
+**** july 5th 2023
+[[./migrations/readme.org]]
+[[./img/ip_table_erd.png]]
+*** main tracking functions
+**** customers, companies and client
+ - here, I've seperated out each category for future
+   integration with an ordering and invoicing system
+   which will be split. 
+     customers -> order
+     clients -> invoiced
+     people -> order or invoice
+     customers, clients and people -> companies
+     companies != invoice
+     companies != order
+**** serials, manufacturer, device & installations
+ - a device has, a serial, a manufacturer, as well as an installation date and time
+ - device lifecycle is tracked:
+     installation -> deployment
+     deployment -> company
+

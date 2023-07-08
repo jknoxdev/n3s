@@ -1,0 +1,48 @@
+@startuml
+
+!define TABLE(x) class x << (T,#FFAAAA) >>
+!define PK(x) <b>x</b>
+!define FK(x) <u>x</u>
+
+hide methods
+hide stereotypes
+
+skinparam classAttributeIconSize 0
+
+package "Database Schema" {
+  
+  TABLE(Customers) {
+    PK(customer_id) INT
+    name VARCHAR(100)
+    email VARCHAR(100)
+    phone VARCHAR(20)
+    address VARCHAR(200)
+  }
+
+  TABLE(Products) {
+    PK(product_id) INT
+    name VARCHAR(100)
+    description TEXT
+    price NUMERIC(10, 2)
+  }
+
+  TABLE(Orders) {
+    PK(order_id) INT
+    FK(customer_id) INT
+    order_date DATE
+    total_amount NUMERIC(10, 2)
+  }
+
+  TABLE(OrderItems) {
+    PK(order_item_id) INT
+    FK(order_id) INT
+    FK(product_id) INT
+    quantity INT
+  }
+
+  Customers "1" -- "N" Orders : FK(customer_id)
+  Orders "1" -- "N" OrderItems : FK(order_id)
+  Products "1" -- "N" OrderItems : FK(product_id)
+}
+
+@enduml

@@ -1,0 +1,20 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "n3s",
+            "Group": "Servers",
+            "Host": "n3sdb.postgres.database.azure.com",
+            "Port": 5432,
+            "MaintenanceDB": "postgres",
+            "Username": "n3sdba",
+            "UseSSHTunnel": 0,
+            "TunnelPort": "22",
+            "TunnelAuthentication": 0,
+            "KerberosAuthentication": false,
+            "ConnectionParameters": {
+                "sslmode": "prefer",
+                "connect_timeout": 10
+            }
+        }
+    }
+}

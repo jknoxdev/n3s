@@ -1,0 +1,100 @@
+* ip table modifications:
+** july 5th 2023
+*** ip tables, paths and ip address tracking:
+
+[[../img/ip_table_erd.png]]
+
+ - ip_list 
+
+[[../img/table_erd_ip.png]]
+
+    this is to track a list of the ip address for each of the devices.
+    I didn't catch the sql from the first table, but here the idea 
+    is to log the ips over time, to detect customer path modifications
+    on their segments within the network.. in the future, I'd like to
+    also log as numbers and generate diagrams for each of their inter
+    connects across regions to help fault resolution for vpc and mpls 
+    related issues at the endpoints for the terrestrial infrastructures
+
+#+begin_src sql :results output none
+CREATE TABLE public.ip_list (
+	ip_list_id serial NOT NULL,
+	CONSTRAINT ip_list_pk PRIMARY KEY (ip_list_id)
+);
+#+end_src
+ - adding links to the list:
+#+begin_src sql :results output none
+ALTER TABLE public.ip ADD ip_list_id int NULL;
+ALTER TABLE public.ip ADD CONSTRAINT ip_fk FOREIGN KEY (ip_list_id) REFERENCES public.ip_list(ip_list_id);
+#+end_src
+
+
+
+ - ip-list log for customer path traversal logging (same info from above)
+
+[[../img/table_erd_ip_list_log.png]]
+
+#+begin_src sql :results output none
+CREATE TABLE public.ip_list_log (
+	ip_list_log_id serial NOT NULL,
+	first_seen date NULL,
+	first_seen_at time NULL,
+	last_seen_at time NULL,
+	total_time_used time NULL,
+	path_association_id uuid NULL,
+	CONSTRAINT ip_list_log_pk PRIMARY KEY (ip_list_log_id)
+);
+#+end_src
+
+ - path association id: 
+
+[[../img/table_erd_path_assoc.png]]
+
+   here, the path association uuid is seperate from the id so as to not confuse
+   the accessor with the distinction, uuid is much larger than the primary key id
+   used for tracking, so I've set the internal serial to be generated on an int to start: 
+
+#+begin_src sql :results output none
+CREATE TABLE public.path_association (
+	path_association_uuid uuid NULL,
+	path_association_id serial NOT NULL,
+	CONSTRAINT path_association_pk PRIMARY KEY (path_association_id)
+);
+CREATE TABLE public.path_association (
+	path_association_uuid uuid NULL,
+	path_association_id serial NOT NULL,
+	CONSTRAINT path_association_pk PRIMARY KEY (path_association_id)
+);
+
+#+end_src 
+
+ - and the associated keys: 
+
+#+begin_src sql :results output none
+ALTER TABLE public.ip_list_log ALTER COLUMN path_association_id TYPE int USING path_association_id::int;
+ALTER TABLE public.ip_list_log ADD CONSTRAINT ip_list_log_fk FOREIGN KEY (path_association_id) REFERENCES public.path_association(path_association_id);
+#+end_src
+
+
+ - I had to delete the uuid foreign key for invalid datatypes and create a new 
+   int before doing this (invalid datatypes)
+
+#+begin_src sql :results output none
+ALTER TABLE public.ip_list_log ADD path_association_id int NULL;
+ALTER TABLE public.ip_list_log ADD CONSTRAINT ip_list_log_fk FOREIGN KEY (path_association_id) REFERENCES public.path_association(path_association_id);
+
+ALTER TABLE public.ip_list_log ADD path_association_id int NULL;
+ALTER TABLE public.ip_list_log ADD path_association_id int NULL;
+
+ALTER TABLE public.ip_list_log DROP CONSTRAINT ip_list_log_fk;
+ALTER TABLE public.ip_list_log ADD path_association_id int NULL;
+ALTER TABLE public.ip_list_log ADD CONSTRAINT ip_list_log_fk_path_assoc FOREIGN KEY (path_association_id) REFERENCES public.path_association(path_association_id);
+
+ALTER TABLE public.ip_list_log DROP COLUMN path_association_id;
+
+ALTER TABLE public.ip_list_log ADD path_association_id int NULL;
+ALTER TABLE public.ip_list_log ADD CONSTRAINT ip_list_log_fk_path_assoc FOREIGN KEY (path_association_id) REFERENCES public.path_association(path_association_id);
+
+
+#+end_src
+

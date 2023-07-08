@@ -1,0 +1,33 @@
+
+#+OPTIONS: toc:nil, num:auto, title:nil, author:justin_knox
+
+* toptions
+toc: Controls the generation of the table of contents. Set to nil to disable the TOC.
+num: Controls the numbering of headlines. Set to nil to disable numbering.
+title: Determines the handling of the document title. Set to nil to exclude the title from the exported output.
+author: Controls the handling of the document author. Set to nil to exclude the author from the exported output.
+date: Determines the handling of the document date. Set to nil to exclude the date from the exported output.
+timestamp: Controls the handling of timestamps. Set to nil to exclude timestamps from the exported output.
+creator: Specifies the creator of the exported document.
+email: Specifies the email address associated with the exported document.
+html-postamble: Allows customization of the HTML export postamble.
+html-preamble: Allows customization of the HTML export preamble.
+
+
+* june 30th, 2023
+:properties:				    
+:export_file_name: ../dailies/jknox_20230630
+:options:
+:toc: nil
+:end:	
+
+** updates
+ - [X] sanitze database file names
+** todos
+ - [ ] retool database for serials
+ - [ ] generate new schematics
+ - [ ] draw out network diagram for current infrastructure
+ - [ ] bring up the azure instance
+ - [ ] bring up the aws vm's for remote access
+ - [ ] retool the python scripts for passwords to work with local instance
+ - [ ] retool the scripts to add entries in to the database

@@ -1,0 +1,740 @@
+* v002
+** template
+#+begin_src plantuml :file export_01.svg
+
+  @startuml
+
+  
+  @enduml
+#+end_src
+** more_traditional
+#+begin_src plantuml :file db_04.svg
+@startuml
+
+!define TABLE_BORDER_COLOR Black
+!define TABLE_HEADER_COLOR LightGray
+!define TABLE_ROW_COLOR White
+!define TABLE_HEADER_FONT_SIZE 14
+!define TABLE_ROW_FONT_SIZE 12
+!define ENTITY_RELATIONSHIP_LINE_COLOR Black
+!define ENTITY_COLOR White
+!define RELATIONSHIP_COLOR LightGray
+!define RELATIONSHIP_ARROW_COLOR Black
+
+skinparam class {
+    BackgroundColor ENTITY_COLOR
+    BorderColor TABLE_BORDER_COLOR
+    ArrowColor RELATIONSHIP_ARROW_COLOR
+}
+
+skinparam entity {
+    BackgroundColor ENTITY_COLOR
+    BorderColor TABLE_BORDER_COLOR
+    FontColor Black
+}
+
+skinparam relationship {
+    BackgroundColor RELATIONSHIP_COLOR
+    BorderColor TABLE_BORDER_COLOR
+    FontColor Black
+}
+
+entity "association" as association {
+    + association_id : INTEGER [PK]
+    type : TEXT
+}
+
+entity "category" as category {
+    + category_id : INTEGER [PK]
+    category : TEXT
+}
+
+entity "category_list" as category_list {
+    + category_list_id : INTEGER [PK]
+    main : category [FK]
+    second : category [FK]
+    third : category [FK]
+}
+
+entity "company" as company {
+    name : TEXT
+    email : TEXT
+    phone
+    + company_id : INTEGER [PK]
+    business_start : NUMERIC
+    business_end : NUMERIC
+    co_owned : company [FK]
+    co_owned_two : NUMERIC
+}
+
+entity "device" as device {
+    + device_id : INTEGER [PK]
+    model_id : model [FK]
+    manufacturer_id : manufacturer [FK]
+    category_list_id : category_list [FK]
+    serial_id : serial [FK]
+    name : TEXT
+    warranty_id : warranty [FK]
+    location_id : location [FK]
+}
+
+entity "device_type" as device_type {
+    + device_type_id : INTEGER [PK]
+    category_id
+    device_type : TEXT
+}
+
+entity "did" as did {
+    + did_id : INTEGER [PK]
+    did_no : NUMERIC
+    sip_id : sip [FK]
+}
+
+entity "location" as location {
+    address
+    address_two
+    city
+    state
+    latitude
+    longitude
+    + location_id : INTEGER [PK]
+    company_id : company [FK]
+}
+
+entity "manufacturer" as manufacturer {
+    + manufacturer_id : INTEGER [PK]
+    name : TEXT
+}
+
+entity "model" as model {
+    + model_id : INTEGER [PK]
+}
+
+entity "person" as person {
+    + person_id : INTEGER [PK]
+    company_id : company [FK]
+    location_id : location [FK]
+}
+
+entity "phone" as phone {
+    + phone_id : INTEGER [PK]
+    number : NUMERIC
+    sim : TEXT
+    model_id : model [FK]
+    manufacturer_id : manufacturer [FK]
+    sip_id : sip [FK]
+}
+
+entity "serial" as serial {
+    + serial_id : INTEGER [PK]
+    serial_no : TEXT
+}
+
+entity "sip" as sip {
+    + sip_id : INTEGER [PK]
+    sip_no : NUMERIC
+    "" : company [FK]
+}
+
+entity "warranty" as warranty {
+    + warranty_id : INTEGER [PK]
+    start_date : NUMERIC
+    end_date : NUMERIC
+}
+
+association "category" -- "category_list" : "1" -- "0..1"
+association "category_list" -- "category" : "1" -- "1"
+association "company" -- "company" : "0..1" -- "1"
+association "company" -- "location" : "1" -- "0..*"
+association "device" -- "model" : "1" -- "1"
+association "device" -- "manufacturer" : "1" -- "1"
+association "device" -- "category_list" : "1" -- "1"
+association "device" -- "serial" : "1" -- "1"
+association "device" -- "warranty" : "1" -- "1"
+association "device" -- "location" : "1" -- "1"
+association "device_type" -- "category" : "1" -- "0..*"
+association "did" -- "sip" : "1" -- "0..1"
+association "location" -- "company" : "1" -- "0..1"
+association "model" -- "phone" : "1" -- "0..*"
+association "model" -- "manufacturer" : "1" -- "1"
+association "phone" -- "sip" : "1" -- "0..1"
+association "serial" -- "device" : "1" -- "0..*"
+association "sip" -- "company" : "1" -- "0..1"
+association "warranty" -- "device" : "1" -- "0..*"
+association "company" -- "person" : "1" -- "0..*"
+association "location" -- "person" : "1" -- "0..*"
+
+@enduml
+
+#+end_src
+
+#+RESULTS:
+[[file:db_04.svg]]
+
+** database sqlite
+#+begin_src plantuml :file db_03.svg
+
+  @startuml
+
+!define TABLE_BORDER_COLOR DarkSlateGray
+!define TABLE_HEADER_COLOR LightSteelBlue
+!define TABLE_ROW_COLOR White
+!define TABLE_HEADER_FONT_SIZE 14
+!define TABLE_ROW_FONT_SIZE 12
+!define ENTITY_RELATIONSHIP_LINE_COLOR DarkSlateGray
+!define ENTITY_COLOR LightGreen
+!define RELATIONSHIP_COLOR LightBlue
+!define RELATIONSHIP_ARROW_COLOR LightBlue
+
+skinparam class {
+    BackgroundColor ENTITY_COLOR
+    BorderColor TABLE_BORDER_COLOR
+    ArrowColor RELATIONSHIP_ARROW_COLOR
+}
+
+skinparam entity {
+    BackgroundColor ENTITY_COLOR
+    BorderColor TABLE_BORDER_COLOR
+    FontColor DarkSlateGray
+}
+
+skinparam relationship {
+    BackgroundColor RELATIONSHIP_COLOR
+    BorderColor TABLE_BORDER_COLOR
+    FontColor DarkSlateGray
+}
+
+entity "association" as association {
+    + association_id : INTEGER [PK]
+    type : TEXT
+}
+
+entity "category" as category {
+    + category_id : INTEGER [PK]
+    category : TEXT
+}
+
+entity "category_list" as category_list {
+    + category_list_id : INTEGER [PK]
+    main : category [FK]
+    second : category [FK]
+    third : category [FK]
+}
+
+entity "company" as company {
+    name : TEXT
+    email : TEXT
+    phone
+    + company_id : INTEGER [PK]
+    business_start : NUMERIC
+    business_end : NUMERIC
+    co_owned : company [FK]
+    co_owned_two : NUMERIC
+}
+
+entity "device" as device {
+    + device_id : INTEGER [PK]
+    model_id : model [FK]
+    manufacturer_id : manufacturer [FK]
+    category_list_id : category_list [FK]
+    serial_id : serial [FK]
+    name : TEXT
+    warranty_id : warranty [FK]
+    location_id : location [FK]
+}
+
+entity "device_type" as device_type {
+    + device_type_id : INTEGER [PK]
+    category_id
+    device_type : TEXT
+}
+
+entity "did" as did {
+    + did_id : INTEGER [PK]
+    did_no : NUMERIC
+    sip_id : sip [FK]
+}
+
+entity "location" as location {
+    address
+    address_two
+    city
+    state
+    latitude
+    longitude
+    + location_id : INTEGER [PK]
+    company_id : company [FK]
+}
+
+entity "manufacturer" as manufacturer {
+    + manufacturer_id : INTEGER [PK]
+    name : TEXT
+}
+
+entity "model" as model {
+    + model_id : INTEGER [PK]
+}
+
+entity "person" as person {
+    + person_id : INTEGER [PK]
+    company_id : company [FK]
+    location_id : location [FK]
+}
+
+entity "phone" as phone {
+    + phone_id : INTEGER [PK]
+    number : NUMERIC
+    sim : TEXT
+    model_id : model [FK]
+    manufacturer_id : manufacturer [FK]
+    sip_id : sip [FK]
+}
+
+entity "serial" as serial {
+    + serial_id : INTEGER [PK]
+    serial_no : TEXT
+}
+
+entity "sip" as sip {
+    + sip_id : INTEGER [PK]
+    sip_no : NUMERIC
+    "" : company [FK]
+}
+
+entity "warranty" as warranty {
+    + warranty_id : INTEGER [PK]
+    start_date : NUMERIC
+    end_date : NUMERIC
+}
+
+association "category" -- "category_list" : "1" -- "0..1"
+association "category_list" -- "category" : "1" -- "1..*"
+association "company" -- "company" : "0..1" -- "1"
+association "company" -- "location" : "1" -- "0..*"
+association "device" -- "model" : "1" -- "1"
+association "device" -- "manufacturer" : "1" -- "1"
+association "device" -- "category_list" : "1" -- "1"
+association "device" -- "serial" : "1" -- "1"
+association "device" -- "warranty" : "1" -- "1"
+association "device" -- "location" : "1" -- "1"
+association "device_type" -- "category" : "1" -- "0..*"
+association "did" -- "sip" : "1" -- "0..1"
+association "location" -- "company" : "1" -- "0..1"
+association "model" -- "phone" : "1" -- "0..*"
+association "model" -- "manufacturer" : "1" -- "1"
+association "phone" -- "sip" : "1" -- "0..1"
+association "serial" -- "device" : "1" -- "0..*"
+association "sip" -- "company" : "1" -- "0..1"
+association "warranty" -- "device" : "1" -- "0..*"
+association "company" -- "person" : "1" -- "0..*"
+association "location" -- "person" : "1" -- "0..*"
+
+@enduml
+
+
+#+end_src
+
+#+RESULTS:
+[[file:db_03.svg]]
+
+** db
+#+begin_src plantuml :file db_02.svg
+
+  @startuml
+
+  !define TABLE(x) class x << (T,#FFAAAA) >>
+  !define PK(x) <b>x</b>
+  !define FK(x) <u>x</u>
+
+  hide methods
+  hide stereotypes
+
+  skinparam classAttributeIconSize 0
+
+  package "Database Schema" {
+
+    TABLE(Customers) {
+      PK(customer_id) INT
+      name VARCHAR(100)
+      email VARCHAR(100)
+      phone VARCHAR(20)
+      address VARCHAR(200)
+      city VARCHAR(100)
+      state VARCHAR(2)
+    }
+
+    TABLE(Products) {
+      PK(product_id) INT
+      name VARCHAR(100)
+      description TEXT
+      price NUMERIC(10, 2)
+    }
+
+    TABLE(Orders) {
+      PK(order_id) INT
+      FK(customer_id) INT
+      order_date DATE
+      total_amount NUMERIC(10, 2)
+    }
+
+    TABLE(OrderItems) {
+      PK(order_item_id) INT
+      FK(order_id) INT
+      FK(product_id) INT
+      quantity INT
+    }
+
+    Customers "1" -- "N" Orders : FK(customer_id)
+    Orders "1" -- "N" OrderItems : FK(order_id)
+    Products "1" -- "N" OrderItems : FK(product_id)
+  }
+
+  @enduml
+#+end_src
+
+#+RESULTS:
+[[file:db_02.svg]]
+
+* initial db
+#+begin_src plantuml :file db_01.svg
+
+  @startuml
+
+  !define TABLE(x) class x << (T,#FFAAAA) >>
+  !define PK(x) <b>x</b>
+  !define FK(x) <u>x</u>
+
+  hide methods
+  hide stereotypes
+
+  skinparam classAttributeIconSize 0
+
+  package "Database Schema" {
+
+    TABLE(Customers) {
+      PK(customer_id) INT
+      name VARCHAR(100)
+      email VARCHAR(100)
+      phone VARCHAR(20)
+      address VARCHAR(200)
+    }
+
+    TABLE(Products) {
+      PK(product_id) INT
+      name VARCHAR(100)
+      description TEXT
+      price NUMERIC(10, 2)
+    }
+
+    TABLE(Orders) {
+      PK(order_id) INT
+      FK(customer_id) INT
+      order_date DATE
+      total_amount NUMERIC(10, 2)
+    }
+
+    TABLE(OrderItems) {
+      PK(order_item_id) INT
+      FK(order_id) INT
+      FK(product_id) INT
+      quantity INT
+    }
+
+    Customers "1" -- "N" Orders : FK(customer_id)
+    Orders "1" -- "N" OrderItems : FK(order_id)
+    Products "1" -- "N" OrderItems : FK(product_id)
+  }
+
+  @enduml
+#+end_src
+
+#+RESULTS:
+[[file:db_01.svg]]
+
+* puff_hamtramck_netuml_004
+#+begin_src plantuml :file puff_hamtramck_netuml_003.svg
+
+      @startuml
+
+    title Puff Hamtramck - L3 Topology - June 2023
+
+    ' Comcast Business Modem
+  modem Modem
+
+  ' Devices
+  device "PC" as PC
+  device "Modem" as Modem
+  device "Ubiquity Switch, Network Pro UDM" as Switch
+  device "TP-Link TL-SG1016PE" as Switch
+  device "TrendNet" as Switch
+
+  ' Connections
+  Switch -- PC : Ethernet
+  Router -- Smartphone : Wi-Fi
+  Router -- SmartTV : Wi-Fi
+  Router -- Printer : Ethernet
+
+    package "isp" {
+      [ISP] as ISP
+
+      package "comcast modem, CBR-T, 8-port" {
+        [Comcast Modem] as Modem
+
+        [NVR RU13]
+        [NVR RU15]
+        [ATM]
+
+        package "TrendNet Layer 2 Switch, 8-port" {
+          [TrendNet Switch] as TrendNet_Switch
+
+          [Modem] -- [TrendNet Switch]
+          [TrendNet Switch] -- [NVR RU13]
+          [TrendNet Switch] -- [NVR RU15]
+          [TrendNet Switch] -- [ATM]
+        }
+
+        [NVR 14]
+        [ATM]
+
+        package "Ubiquity Layer 3 Switch, 8-port" {
+          [Ubiquity Switch] as Ubiquity_Switch
+
+          [Modem] -- [Ubiquity Switch]
+          [Ubiquity Switch] -- [TrendNet Switch]
+          [Ubiquity Switch] -- [NVR 14]
+          [Ubiquity Switch] -- [ATM]
+        }
+      }
+    }
+
+    @enduml
+
+
+
+#+end_src
+
+#+RESULTS:
+[[file:puff_hamtramck_netuml_003.svg]]
+* puff_hamtramck_netuml_003
+#+begin_src plantuml :file puff_hamtramck_netuml_003.svg
+
+  @startuml
+
+title UML Topology Diagram
+
+package "isp" {
+  [ISP] as ISP
+  
+  package "comcast modem, CBR-T, 8-port" {
+    [Comcast Modem] as Modem
+    
+    [NVR RU13]
+    [NVR RU15]
+    [ATM]
+    
+    package "TrendNet Layer 2 Switch, 8-port" {
+      [TrendNet Switch] as TrendNet_Switch
+      
+      [Modem] -- [TrendNet Switch]
+      [TrendNet Switch] -- [NVR RU13]
+      [TrendNet Switch] -- [NVR RU15]
+      [TrendNet Switch] -- [ATM]
+    }
+    
+    [NVR 14]
+    [ATM]
+    
+    package "Ubiquity Layer 3 Switch, 8-port" {
+      [Ubiquity Switch] as Ubiquity_Switch
+      
+      [Modem] -- [Ubiquity Switch]
+      [Ubiquity Switch] -- [TrendNet Switch]
+      [Ubiquity Switch] -- [NVR 14]
+      [Ubiquity Switch] -- [ATM]
+    }
+  }
+}
+
+@enduml
+
+
+
+#+end_src
+
+#+RESULTS:
+[[file:puff_hamtramck_netuml_003.svg]]
+* puff_hamtramck_netuml_002
+#+begin_src plantuml :file puff_hamtramck_netuml_002.svg
+  @startuml
+
+  !define PORT(x) "|" + x + "|"
+  !define DEVICE(name, label) [name] as name #label
+
+  skinparam componentStyle uml2
+
+  title UML Topology Diagram
+
+  package "isp" {
+    DEVICE(ISP, "ISP")
+
+    package "comcast modem, CBR-T, 8-port" {
+      DEVICE(Modem, "Comcast Modem")
+
+      DEVICE(NVR_RU13, "NVR RU13")
+      DEVICE(NVR_RU15, "NVR RU15")
+      DEVICE(ATM1, "ATM")
+
+      DEVICE(TrendNet_Switch, "TrendNet Layer 2 Switch, 8-port")
+
+      DEVICE(NVR_14, "NVR 14")
+      DEVICE(ATM2, "ATM")
+
+      DEVICE(Ubiquity_Switch, "Ubiquity Layer 3 Switch, 8-port")
+
+      DEVICE(TPLink_Switch, "TP-LINK Layer 2 Switch, TL-SG1016PE, 16-port")
+      DEVICE(Uplink, "uplink (back to Ubiquity)")
+
+      DEVICE(ATM3, "7ATM")
+      DEVICE(Sonos, "Sonos RU0")
+      DEVICE(RC, "RC")
+      DEVICE(PG2, "PG2")
+      DEVICE(Phon7, "Phon7")
+      DEVICE(Phn8, "Phn8")
+      DEVICE(AC_LAN1, "AC LAN")
+      DEVICE(M2R, "M2R")
+      DEVICE(AC_LAN2, "AC LAN")
+      DEVICE(RF, "RF")
+      DEVICE(LAN3, "LAN 3")
+      DEVICE(AC_LAN3, "AC LAN")
+      DEVICE(LAN2, "LAN 2")
+      DEVICE(LAN9, "LAN 9")
+
+      ISP -down- Modem
+      Modem -down- NVR_RU13
+      Modem -down- NVR_RU15
+      Modem -down- ATM1
+      Modem -down- TrendNet_Switch
+      Modem -down- NVR_14
+      Modem -down- ATM2
+      Modem -down- Ubiquity_Switch
+
+      TrendNet_Switch -down- Modem
+      TrendNet_Switch -down- ATM3
+      TrendNet_Switch -down- Sonos
+      TrendNet_Switch -down- RC
+      TrendNet_Switch -down- PG2
+      TrendNet_Switch -down- Phon7
+      TrendNet_Switch -down- Phn8
+      TrendNet_Switch -down- AC_LAN1
+      TrendNet_Switch -down- M2R
+      TrendNet_Switch -down- AC_LAN2
+      TrendNet_Switch -down- RF
+      TrendNet_Switch -down- LAN3
+      TrendNet_Switch -down- AC_LAN3
+      TrendNet_Switch -down- LAN2
+      TrendNet_Switch -down- LAN9
+
+      Ubiquity_Switch -down- TPLink_Switch
+      TPLink_Switch -down- Uplink
+      TPLink_Switch -down- ATM3
+      TPLink_Switch -down- Sonos
+      TPLink_Switch -down- RC
+      TPLink_Switch -down- PG2
+      TPLink_Switch -down- Phon7
+      TPLink_Switch -down- Phn8
+      TPLink_Switch -down- AC_LAN1
+      TPLink_Switch -down- M2R
+      TPLink_Switch -down- AC_LAN2
+      TPLink_Switch -down- RF
+      TPLink_Switch -down- LAN3
+      TPLink_Switch -down- AC_LAN3
+      TPLink_Switch -down- LAN2
+      TPLink_Switch -down- LAN9
+    }
+  }
+
+  @enduml
+
+
+#+end_src
+
+#+RESULTS:
+[[file:puff_hamtramck_netuml_002.svg]]
+* puff_hamtramck_netuml_001
+#+begin_src plantuml :file puff_hamtramck_netuml_001.svg
+
+@startuml
+
+!define ConnectorPining(com1, port1, com2, port2) link between(com1, port1, com2, port2)
+
+!define UnlabeledPort(port) node "<i>Unlabeled Port\n(to Floor)</i>" as port #Cornsilk
+
+!define Floor(name) node "<b>Floor: " + name + "</b>" as name #LightBlue
+
+package "ISP" {
+  component "Comcast Modem" as modem #White {
+    component "NVR RU13" as nvr_ru13 #White
+    nvr_ru13 -[hidden]-> modem : Port 1
+    UnlabeledPort(port2)
+    component "NVR RU15" as nvr_ru15 #White
+    nvr_ru15 -[hidden]-> modem : Port 3
+    component "ATM" as atm1 #White
+    atm1 -[hidden]-> modem : Port 4
+    component "TrendNet Layer 2 Switch" as trendnet_switch #White {
+      trendnet_switch -[hidden]-> modem : Port 5
+      UnlabeledPort(port1)
+      UnlabeledPort(port5)
+      UnlabeledPort(port6)
+      UnlabeledPort(port7)
+      UnlabeledPort(port8)
+    }
+    component "NVR 14" as nvr14 #White
+    nvr14 -[hidden]-> modem : Port 6
+    component "ATM" as atm2 #White
+    atm2 -[hidden]-> modem : Port 7
+    component "Ubiquity Layer 3 Switch" as ubiquity_switch #White {
+      ubiquity_switch -[hidden]-> modem : Port 8
+      component "TP-LINK Layer 2 Switch, TL-SG1016PE" as tp_link_switch #White {
+        tp_link_switch -[hidden]-> ubiquity_switch : Port 1
+        UnlabeledPort(port1)
+        UnlabeledPort(port2) #LightBlue
+        UnlabeledPort(port3) #LightBlue
+        UnlabeledPort(port4) #LightBlue
+        UnlabeledPort(port5) #LightBlue
+        UnlabeledPort(port6) #LightBlue
+        UnlabeledPort(port7) #LightBlue
+        UnlabeledPort(port8) #LightBlue
+        UnlabeledPort(port9) #LightBlue
+        UnlabeledPort(port10) #LightBlue
+        UnlabeledPort(port11) #LightBlue
+        UnlabeledPort(port12) #LightBlue
+        UnlabeledPort(port13) #LightBlue
+        UnlabeledPort(port14) #LightBlue
+        UnlabeledPort(port15) #LightBlue
+        UnlabeledPort(port16) #LightBlue
+      }
+      UnlabeledPort(port2)
+      UnlabeledPort(port3)
+      UnlabeledPort(port4)
+      UnlabeledPort(port5)
+      UnlabeledPort(port6)
+      UnlabeledPort(port7)
+      UnlabeledPort(port8)
+    }
+  }
+  
+  Floor("Floor") as floor1 {
+    ConnectorPining(modem, port5, modem, port1)
+    ConnectorPining(trendnet_switch, port3, floor1, port3)
+    ConnectorPining(trendnet_switch, port4, floor1, port4)
+    ConnectorPining(trendnet_switch, port6, floor1, port6)
+    ConnectorPining(trendnet_switch, port7, floor1, port7)
+  }
+}
+
+@enduml
+
+#+end_src
+
+#+RESULTS:
+[[file:puff_hamtramck_netuml_001.svg]]

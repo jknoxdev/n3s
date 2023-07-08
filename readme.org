@@ -1,0 +1,34 @@
+#+OPTIONS: ^:{}
+* n^{3}s - devlab and projects:
+** monorepo:
+*** [[./backups/]] 
+ - remote systems, as well as internal
+*** [[./configs/]]                                         
+*** [[./dailies/]]
+ - daily reports / log & project updates
+*** [[./data/]]
+**** this is where the raw data goes
+*** [[./database/]] [[./database/readme.org]]
+ - this is and example operations database
+[[file:img/pgerd_db_july_02.pgerd.png][n3sdb schema 2023q3a]]
+[[./img/pgerd_db_july_02.pgerd.png]]
+*** [[./diagrams/]]
+[[file:diagrams/net_arch_2023q3.png][n3s compute architecture 2023q3a]]
+[[./diagrams/net_arch_2023q3.png]]
+ - network diagrams generated in PlantUML, eventually I hope to have these
+   programmatically generated.
+*** [[./img/]]
+ - source img dir
+*** [[./keys/]]
+ - this is where the encrypted keypass databases are stored for agents
+*** [[./logs/]]
+ - generic store for machine logs
+*** [[./machines/]]
+ - rdps, vnc notes, and all remote access information
+*** [[./notes]]
+ - notes, procedures and howtos
+*** [[./reports/]]
+ - reports are generated from the agents at the moment, the pdf aggregator then
+   merges them into a central pdf for distribution
+*** [[./scripts/]]
+*** [[./rdps/]]

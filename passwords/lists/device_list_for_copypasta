@@ -1,0 +1,27 @@
+site/access_control
+site/alarm_panels
+site/media_players
+network/firewalls
+network/media_converters
+network/modems
+network/switches
+network/routers
+network/nvrs
+network/wireless_access_points
+network/wireless_networks
+
+mkdir default/physical/door_codes
+mkdir default/physical/gates
+mkdir default/physical/lockers
+mkdir default/printers/3d
+mkdir default/printers/documents
+mkdir default/printers/id
+mkdir default/printers/labels
+mkdir default/site/servers
+mkdir default/site/tablets
+mkdir default/video/cameras
+mkdir default/video/converters
+mkdir default/video/distributers
+mkdir default/video/extenders
+mkdir default/video/recorders
+site/workstations
