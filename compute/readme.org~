@@ -1,5 +1,0 @@
-#+options: ^:{}
-* n^{3}s_compute
-** devlab architecture
- - the lab is split into three main categories, cloud, home, and dev
-[[../diagrams/net_arch_2023q3.png]]
