@@ -8,6 +8,8 @@
  - daily reports / log & project updates
 *** [[./data/]]
 **** this is where the raw data goes
+*** ./compute/
+ - what the ops?
 *** [[./database/]] [[./database/readme.org]]
  - this is and example operations database
 [[file:img/pgerd_db_july_02.pgerd.png][n3sdb schema 2023q3a]]
@@ -27,6 +29,8 @@
  - rdps, vnc notes, and all remote access information
 *** [[./notes]]
  - notes, procedures and howtos
+*** ./ops/
+ - ansible, vagrant, puppet, docker and chef configs
 *** [[./reports/]]
  - reports are generated from the agents at the moment, the pdf aggregator then
    merges them into a central pdf for distribution
