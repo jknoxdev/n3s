@@ -1,3 +1,0 @@
-* pdf_quiz
-** attempt to make a quiz app that can parse a pdf, turn the questions into a database, then quiz you on the answers, all through voice with touch feedback on a web interface
-

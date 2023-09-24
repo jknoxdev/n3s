@@ -1,0 +1,9 @@
+---
+- hosts: all
+  tasks:
+  - name: Package installation
+    dnf:
+      name:
+        - htop
+        - nload
+      state: latest
