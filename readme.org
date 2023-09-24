@@ -21,8 +21,8 @@
    programmatically generated.
 *** [[./img/]]
  - source img dir
-*** ./infra/
-**** vagrant, ansible over ssh with vmware, virtualbox to start
+*** [[./infra]]/
+ - vagrant, ansible over ssh with vmware, virtualbox to start
 *** [[./keys/]]
  - this is where the encrypted keypass databases are stored for agents
 *** [[./logs/]]
