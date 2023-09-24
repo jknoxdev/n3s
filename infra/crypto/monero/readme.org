@@ -1,0 +1,1 @@
+* monero full nodes for cloud transaction approval
