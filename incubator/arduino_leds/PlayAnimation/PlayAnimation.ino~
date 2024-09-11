@@ -1,0 +1,62 @@
+/*
+  Play Animation
+
+  Sketch shows animation defined in animation.h
+
+  See the full documentation here:
+  https://docs.arduino.cc/tutorials/uno-r4-wifi/led-matrix
+*/
+
+
+
+#include "Arduino_LED_Matrix.h"   //Include the LED_Matrix library
+#include "animation.h"            //Include animation.h header file
+
+// Create an instance of the ArduinoLEDMatrix class
+ArduinoLEDMatrix matrix;  
+
+int animode = 3;
+
+void setup() {
+  Serial.begin(115200);
+   matrix.begin();
+  // switch (counter) {
+  //   case 0:
+  //     matrix.loadSequence(LEDMATRIX_ANIMATION_STARTUP);
+  //     break;
+  //   case 2:
+  //     matrix.loadSequence(LEDMATRIX_BLUETOOTH);
+  //     break;
+  //   default:
+  //     matrix.loadSequence(LEDMATRIX_BOOTLOADER_ON);
+  //     break;
+  // // }
+    //matrix.loadSequence(LEDMATRIX_ANIMATION_STARTUP);
+    //matrix.loadSequence(LEDMATRIX_ANIMATION_NOTIFICATION);
+    //matrix.loadSequence(LEDMATRIX_ANIMATION_TETRIS_INTRO);
+    //matrix.loadSequence(LEDMATRIX_ANIMATION_ATMEGA);
+    
+  //   matrix.loadSequence(LEDMATRIX_BLUETOOTH);
+
+}
+
+void loop() {
+  matrix.play(true);  
+  delay(5000);
+  Serial.println(millis());
+  Serial.println(animode);
+  
+  if (animode >= 5) {
+    animode = 0;
+  }
+    animode++;
+
+    switch (animode){
+      case 0:   matrix.loadSequence(LEDMATRIX_ANIMATION_LED_BLINK_HORIZONTAL);  animode++; break;
+      case 1:   matrix.loadSequence(LEDMATRIX_ANIMATION_LED_BLINK_VERTICAL);    animode++; break;
+      case 2:   matrix.loadSequence(LEDMATRIX_ANIMATION_NOTIFICATION);          animode++; break;
+      case 3:   matrix.loadSequence(LEDMATRIX_ANIMATION_TETRIS_INTRO);          animode++; break;
+      case 4:   matrix.loadSequence(LEDMATRIX_ANIMATION_ATMEGA);                animode++; break;
+      default:  matrix.loadSequence(LEDMATRIX_ANIMATION_STARTUP);               animode++; break;
+    }    
+}
